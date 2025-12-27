@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự Đoán Tiểu Đường AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .main-card { max-width: 800px; margin: 50px auto; border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .header-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px 15px 0 0; padding: 30px; }
+        .btn-predict { background-color: #764ba2; border: none; padding: 12px 30px; font-size: 1.1rem; width: 100%; transition: all 0.3s; }
+        .btn-predict:hover { background-color: #5a387e; transform: translateY(-2px); }
+        .result-box { margin-top: 30px; padding: 20px; border-radius: 10px; text-align: center; }
+        .result-safe { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .result-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card main-card">
+        <div class="header-bg text-center">
+            <h2>🏥 Hệ Thống Dự Đoán Tiểu Đường</h2>
+            <p class="mb-0">Sử dụng mô hình Logistic Regression (Độ chính xác 89%)</p>
+        </div>
+        <div class="card-body p-5">
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.gender.label }}</label>
+                        {{ form.gender }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.age.label }}</label>
+                        {{ form.age }}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.hypertension.label }}</label>
+                        {{ form.hypertension }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.heart_disease.label }}</label>
+                        {{ form.heart_disease }}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.bmi.label }}</label>
+                        {{ form.bmi }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.HbA1c_level.label }}</label>
+                        {{ form.HbA1c_level }}
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label">{{ form.blood_glucose_level.label }}</label>
+                        {{ form.blood_glucose_level }}
+                        <div class="form-text">Mức đường huyết lúc đói hoặc ngẫu nhiên (mg/dL).</div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label">{{ form.smoking_history.label }}</label>
+                        {{ form.smoking_history }}
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary btn-predict">🔍 Phân Tích Ngay</button>
+                </div>
+            </form>
+
+            {% if result %}
+            <div class="result-box {% if 'An toàn' in result %}result-safe{% else %}result-danger{% endif %}">
+                <h3>Kết quả: <strong>{{ result }}</strong></h3>
+                <p class="mb-0">Tỷ lệ dự báo: <strong>{{ probability }}%</strong></p>
+                <small>Lưu ý: Kết quả chỉ mang tính chất tham khảo dựa trên mô hình máy học.</small>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
